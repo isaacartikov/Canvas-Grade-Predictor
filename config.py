@@ -1,0 +1,1 @@
+EXCLUDED_COURSE_KEYWORDS = ["National Honor Society","Band","Jazz","Tri-M","Orientation","Advisory","Library"]

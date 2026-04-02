@@ -1,19 +1,17 @@
 import requests
-import os
 from dotenv import load_dotenv
+from config import EXCLUDED_COURSE_KEYWORDS
 import pandas as pd
+import os
 load_dotenv()
 
 
-def update_grades():
+def fetch_data(institution_url, token,all_data_rows):
 
     all_data_rows = []
 
-    institution_url = os.getenv('INSTITUTION_URL')
     
     courses_url = f"{institution_url}/api/v1/courses?enrollment_type=student&enrollment_state=active&state[]=available&per_page=100"
-
-    token = os.getenv('INSTITUTION_TOKEN')
 
     headers = {
             'Authorization': f'Bearer {token}'
@@ -32,8 +30,12 @@ def update_grades():
         
         if course.get('access_restricted_by_date'):
             continue
+
+        if any(excl.lower() in course_name.lower() for excl in EXCLUDED_COURSE_KEYWORDS):
+            print(f"Skipping non-academic class {course_name}")
+            continue
         try:
-            assignments_url = f"{institution_url}/api/v1/courses/{course_id}/assignments"
+            assignments_url = f"{institution_url}/api/v1/courses/{course_id}/assignments?per_page=100"
             assignments_response = requests.get(assignments_url, headers=headers)
             assignments_response.raise_for_status()
             assignments = assignments_response.json()
@@ -51,8 +53,8 @@ def update_grades():
                 'assignment_name' : assignment_name,
                 'points_possible' : points_possible
             }
-
-        submissions_response = requests.get(f"{institution_url}/api/v1/courses/{course_id}/students/submissions", headers=headers)
+        submissions_url=f"{institution_url}/api/v1/courses/{course_id}/students/submissions?per_page=100"
+        submissions_response = requests.get(submissions_url, headers=headers)
         submissions_response.raise_for_status()
         submissions = submissions_response.json()
 
@@ -70,8 +72,23 @@ def update_grades():
                     'percent' : (points/points_possible)*100
                 }
                 all_data_rows.append(row)
+    return all_data_rows
 
-    df = pd.DataFrame(all_data_rows)
-    df.to_csv("academic_data.csv", index=False)
-    print("Grades updated with most recent data.")
+
+def update_grades():
+    master_list=[]
+
+    master_list=fetch_data(os.getenv("INSTITUTION_ONE_URL"),os.getenv("INSTITUTION_ONE_TOKEN"),master_list)
+
+    second_url=os.getenv("INSTITUTION_TWO_URL", None)
+    second_token=os.getenv("INSTITUTION_TWO_TOKEN", None)
+    if  second_url and second_token:
+        fetch_data(second_url,second_token,master_list)
+    else:
+        print("Second token/url not set, not merging two Canvas submissions.")
+    pd.DataFrame(master_list).to_csv("academic_data.csv",index=False)
+    print("Grades updated in academic_data.csv")
+
+if __name__ == "__main__":
+    update_grades()
     
