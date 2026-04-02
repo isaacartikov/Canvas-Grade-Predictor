@@ -68,28 +68,33 @@ def fetch_data(institution_url, token,all_data_rows):
         submissions_response = requests.get(submissions_url, headers=headers)
         submissions_response.raise_for_status()
         submissions = submissions_response.json()
-
+        submissions.sort(key=lambda s: s.get('submitted_at') or s.get('created_at') or "")
         for s in submissions:
+            
             score= s.get('score',None)
             info = assignment_map.get(s.get('assignment_id'))
-            if score is not None and info and info.get('points_possible',0) > 0:
+            if not info:
+                continue
+            points_possible=info.get('points_possible',0)
+            if score == 0 and points_possible > 0:
+                continue
+            if score is not None and points_possible > 0:
                 name=info['course_name']
                 points=s.get('score')
-                points_possible=info['points_possible']
                 percent=(points/points_possible)*100
                 if any(std.lower() in name.lower() for std in STANDARD_BASED_COURSE):
-                    if score==2.0:
-                        percent=70
-                    elif score==2.5:
-                        percent=80
-                    elif score==3.0:
-                        percent=90
-                    elif score==3.5:
-                        percent=95
-                    elif score==4.0:
-                        percent=100
+                    if points >= 4.0:
+                        percent = 100
+                    elif points >= 3.5:
+                        percent = 95
+                    elif points >= 3.0:
+                        percent = 90
+                    elif points >= 2.5:
+                        percent = 80
+                    elif points >= 2.0:
+                        percent = 70
                     else:
-                        percent=60
+                        percent = 60
                 row = {
                         'course': name,
                         'name': info['assignment_name'],
@@ -110,6 +115,7 @@ def update_grades():
     second_url=os.getenv("INSTITUTION_TWO_URL", None)
     second_token=os.getenv("INSTITUTION_TWO_TOKEN", None)
     if  second_url and second_token:
+        print("Fetching data from second Canvas instance...")
         fetch_data(second_url,second_token,master_list)
     else:
         print("Second token/url not set, not merging two Canvas submissions.")
