@@ -1,6 +1,7 @@
 import pandas as pd
 import numpy as np
 from sklearn.linear_model import LinearRegression
+from config import weights_map
 
 def run_predictions():
 
@@ -11,18 +12,7 @@ def run_predictions():
         return
     courses = df['course'].unique()
 
-    weights_map = {    #A list of weights for each assignment. Higher number means the model places more emphasis, lower means less.
-        "test": 0.50,
-        "exam": 0.50,
-        "interpretive": 0.5,
-        "presentational":0.5,
-        "interpersonal":0.5,
-        "quiz": 0.20,
-        "homework":0.10,
-        "webassign": 0.05,
-        "warmup":0.05,
 
-    }
 
     for course in courses:
         
