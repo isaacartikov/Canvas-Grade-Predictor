@@ -1,8 +1,8 @@
 # Canvas Grade Predictor
 
-Standard Canvas grades reflect a culmination of your work over the semester. This leaves out momentum: what if you had great test scores in the beginning of the semester, but at the end, they diminished? The final would reflect that, making your total score lower. This tool helps you understand where you are **headed**, not where you currently are.
-
 A predictive analytics engine for the Canvas LMS leveraging weighted linear regression and automated data pipelines. Features multi-institution support, chronological trend analysis, and custom weighted-logic for accurate academic risk assessment
+
+Standard Canvas grades reflect a culmination of your work over the semester. This leaves out momentum: what if you had great test scores in the beginning of the semester, but at the end, they diminished? The final would reflect that, making your total score lower. This tool helps you understand where you are **headed**, not where you currently are.
 
 
 ## Features
