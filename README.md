@@ -8,7 +8,7 @@ A predictive analytics engine for the Canvas LMS leveraging weighted linear regr
 ## Features
 
 **Data Filtering** ~ Filters out non-academic courses through user input and assignments depending on its group.<br>
-**Momentum Based Prediction** ~ Projects grade after 5 assignments based on grade trajectory <br>
+**Momentum Based Prediction** ~ Predicts grades based on the trajectory of all graded assignments. <br>
 **User Customizability** ~ Weights grades based on user input through config <br>
 **Dual-Institutional Compatibility** ~ Can collect Canvas data from two different institutions. <br>
 
@@ -31,3 +31,4 @@ INSTITUTION_ONE_URL=https://yourschool.instructure.com
 INSTITUTION_TWO_TOKEN=token_two_here
 INSTITUTION_TWO_URL=https://yourschool.instructure.com
 ```
+***DISCLAIMER***: This tool provides an **ESTIMATE**, not a guarentee.
