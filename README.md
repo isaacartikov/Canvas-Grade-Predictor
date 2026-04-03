@@ -4,11 +4,13 @@ Standard Canvas grades reflect a culmination of your work over the semester. Thi
 
 A predictive analytics engine for the Canvas LMS leveraging weighted linear regression and automated data pipelines. Features multi-institution support, chronological trend analysis, and custom weighted-logic for accurate academic risk assessment
 
-## Features:
-**Filters out non-academic courses through user input and assignments depending on its group.**
-**Projects grade after 5 assignments based on grade trajectory**
-**Weights grades based on user input through config**
-**Dual-Institutional Compatibility**
+
+## Features
+
+**Data Filtering** ~ Filters out non-academic courses through user input and assignments depending on its group.<br>
+**Momentum Based Prediction** ~ Projects grade after 5 assignments based on grade trajectory <br>
+**User Customizability** ~ Weights grades based on user input through config <br>
+**Dual-Institutional Compatibility** ~ Can collect Canvas data from two different institutions. <br>
 
 
 ## Setup
